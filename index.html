@@ -6,41 +6,72 @@
     <script src="json-lee.js"></script>
     <script>
         $(document).ready(function(){
-            var matches = "nffc2012.json";
+            var source = "nffc2012.json";
 
-            $.getJSON(matches, function(data){
+            $.getJSON(source, function(data){
             //alert(data.matches[0].opponent);
             //getMatch(0);
-            var m = data.matches[1];
-            $('#match h1').text(m.opponent + ' (' + m.homeaway + ')');
-            $('#match h2').text(m.home + ' - ' + m.away);
-            var t = "";
-            var p = m.players;
-            for(var i = 0; i < p.length; i++) {
-                if(!p[i].substitute) {
-                    t += "<p>" + p[i].shirt + ".  " + p[i].name + "</p>";    
-                }
+
+            var n = data.matches;
+            for (i = 0; i < n.length; i++) {
+                $('#match-picker').append( $('<option></option>').val(n[i].match).html(n[i].opponent) );
             }
-            $('#players').after(t);
-            var s = '';
-            for(var i = 0; i < p.length; i++) {
-                if(p[i].substitute) {
-                    s += "<p>" + p[i].shirt + ".  " + p[i].name + "</p>";    
+
+            $('#match-picker').change(function(){
+                //var m = data.matches[$(this).val()];
+                var x = $(this).val();
+
+                for (var i = 0; i < n.length; i++) {
+                    if (n[i].match == x) {
+                        var m = n[i];
+                    }
                 }
-            }
-            $('#substitutes').after(s);
+
+
+               
+                $('#match h1').text(m.opponent + ' (' + m.homeaway + ')');
+                $('#match h2').text(m.home + ' - ' + m.away);
+                var t = "";
+                var p = m.players;
+                for(var i = 0; i < p.length; i++) {
+                    if(!p[i].substitute) {
+                        t += "<p>" + p[i].shirt + ".  " + p[i].name + "</p>";    
+                    }
+                }
+                $('#starting').empty().append('<h3>Team</h3>').append(t);
+                var s = '';
+                for(var i = 0; i < p.length; i++) {
+                    if(p[i].substitute) {
+                        s += "<p>" + p[i].shirt + ".  " + p[i].name + "</p>";    
+                    }
+                }
+                $('#substitutes').empty().append('<h3>Substitutes</h3>').append(s);
+            });
+
+            
             });
         });
     </script>
 </head>
 <body>
+    <section id="selection">
+        <select id="match-picker">
+            <option selected>Pick a match</option>
+        </select>
+    </section>
     <section id="match">
         <header>
             <h1></h1>
             <h2></h2>
         </header>
-        <h3 id="players">Team</h3>
-        <h3 id="substitutes">Substitutes</h3>
+        <div id="players">
+            <div id="starting">
+                
+            </div>
+            <div id="substitutes">
+                
+            </div>
+        </div>
     </section>
 </body>
 </html>
