@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+    <title>JSON-Lee</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+    <script src="json-lee.js"></script>
+    <script>
+        $(document).ready(function(){
+            var matches = "nffc2012.json";
+
+            $.getJSON(matches, function(data){
+            //alert(data.matches[0].opponent);
+            //getMatch(0);
+            var m = data.matches[1];
+            $('#match h1').text(m.opponent + ' (' + m.homeaway + ')');
+            $('#match h2').text(m.home + ' - ' + m.away);
+            var t = "";
+            var p = m.players;
+            for(var i = 0; i < p.length; i++) {
+                if(!p[i].substitute) {
+                    t += "<p>" + p[i].shirt + ".  " + p[i].name + "</p>";    
+                }
+            }
+            $('#players').after(t);
+            var s = '';
+            for(var i = 0; i < p.length; i++) {
+                if(p[i].substitute) {
+                    s += "<p>" + p[i].shirt + ".  " + p[i].name + "</p>";    
+                }
+            }
+            $('#substitutes').after(s);
+            });
+        });
+    </script>
+</head>
+<body>
+    <section id="match">
+        <header>
+            <h1></h1>
+            <h2></h2>
+        </header>
+        <h3 id="players">Team</h3>
+        <h3 id="substitutes">Substitutes</h3>
+    </section>
+</body>
+</html>
